@@ -2,9 +2,14 @@ var models = require('../models')
 module.exports = {
   questions: {
     get: function (req, res) {
-      models.questions.get((err, results) => {
+      let product_id = req.query.product_id;
+      models.questions.get(product_id, (err, results) => {
         if(err) {throw err;}
-        res.json(results)
+        let response = {
+          "product_id": product_id,
+          "results": results;
+        }
+        res.json(response);
       });
     },
     post: function(req, res) {
