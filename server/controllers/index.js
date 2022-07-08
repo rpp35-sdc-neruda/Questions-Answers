@@ -6,7 +6,7 @@ module.exports = {
       models.questions.get(product_id, (err, results) => {
         if (err) { throw err; }
         let response = {
-          "product_id": "1",
+          "product_id": product_id,
           "results": []
         }
         let foundProduct_id = false;
@@ -24,7 +24,7 @@ module.exports = {
               if (Object.keys(question.answers).includes(row.answer_id.toString())) {
                 //add photo url to response.results
                 question.answers[row.answer_id.toString()].photos.push(row.url)
-              //if this row is an new answer
+                //if this row is an new answer of the same question, add ti answers array
               } else {
                 question.answers[row.answer_id.toString()] = {
                   id: row.answer_id,
@@ -38,6 +38,7 @@ module.exports = {
               break;
             }
           }
+          //create a new question object
           let newQuestion = {
             question_id: row.question_id,
             question_body: row.question_body,
@@ -53,29 +54,32 @@ module.exports = {
             date: row.answer_date,
             answerer_name: row.answerer_name,
             helpfulness: row.helpfulness,
-            photos: (row.url ? [row.url] : [])
+            photos: row.url ? [row.url] : []
           }
-          if(!foundProduct_id) {response.results.push(newQuestion)};
+          // if the question_id is not found in the response, add the new question object to response
+          if (!foundProduct_id) { response.results.push(newQuestion) };
 
         }
         console.log(response);
-          res.json(response);
-      })},
+        res.json(response);
+      })
+    },
     post: function (req, res) {
-      var params = [];
+      var params = [req.body.question.product_id, req.body.question.body, Math.floor(Date.now()), req.body.question.name, req.body.question.email];
+      //let params = [1, 'haha', Math.floor(Date.now()), "alex", "alex.gmail.com"];
       models.questions.post(params, (err, results) => {
         if (err) { throw err; }
         res.status(201).end();
       })
     },
     helpful: function (req, res) {
-      models.questions.helpful((req, res) => {
+      models.questions.helpful(req.query.question_id, (err, results) => {
         if (err) { throw err; }
         res.status(204).end();
       })
     },
     report: function (req, res) {
-      models.questions.report((req, res) => {
+      models.questions.report(req.query.question_id, (err, results) => {
         if (err) { throw err; }
         res.status(204).end();
       })
@@ -83,28 +87,61 @@ module.exports = {
   },
   answers: {
     get: function (req, res) {
-      models.answers.get((err, results) => {
+      let question_id = req.query.question_id
+      models.answers.get(question_id, (err, results) => {
         if (err) { throw err; }
-        res.json(results)
+        let response = {
+          question: "1",
+          page: 0,
+          count: 5,
+          results: []
+        }
+        for (let i = 0; i < results.rows.length; i++) {
+          let row = results.rows[i];
+          let foundAnswer_id = false;
+          for (let j = 0; j < response.results.length; j++) {
+            let answer = response.results[j];
+            if (row.answer_id === answer.answer_id) {
+              foundAnswer_id = true;
+              answer.photos.push({
+                id: row.photo_id,
+                url: row.url
+              })
+              break;
+            }
+          }
+          let newAnwer = {
+            answer_id: row.answer_id,
+            body: row.body,
+            date: row.date,
+            answerer_name: row.answerer_name,
+            helpfulness: row.helpfulness,
+            photos: row.photo_id ? [{ id: row.photo_id, url: row.url }] : []
+          }
+
+          if (!foundAnswer_id) {
+            response.results.push(newAnwer);
+          }
+        }
+        res.json(response);
       });
     },
     post: function (req, res) {
-      models.answers.post((err, results) => {
-        var params = [];
-        models.answers.post(params, (err, results) => {
-          if (err) { throw err; }
-          res.status(201).end();
-        })
+      let question_id = req.query.question_id;
+      let params = [question_id, req.body.answer.body, Math.floor(Date.now()), req.body.answer.name, req.body.answer.email, req.body.answer.photos];
+      models.answers.post(params, (err, results) => {
+        if (err) { throw err; }
+        res.status(201).end();
       })
     },
     helpful: function (req, res) {
-      models.answers.helpful((req, res) => {
+      models.answers.helpful(req.query.answer_id, (err, results) => {
         if (err) { throw err; }
         res.status(204).end();
       })
     },
     report: function (req, res) {
-      models.answers.report((req, res) => {
+      models.answers.report(req.query.answer_id, (err, results) => {
         if (err) { throw err; }
         res.status(204).end();
       })

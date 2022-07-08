@@ -5,7 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require('compression');
-const router = require('./routes.js');
+const routers = require('./routes.js');
 
 //MIDDLEWARE
 app.use(compression());
@@ -19,8 +19,8 @@ app.use((req, res, next) => {
 });
 
 //ROUTE
-app.use('/qa/questions', router);
-
+app.use('/qa/questions', routers.questions);
+app.use('/qa/answers', routers.answers)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
