@@ -29,7 +29,7 @@ module.exports = {
                 question.answers[row.answer_id.toString()] = {
                   id: row.answer_id,
                   body: row.answer_body,
-                  date: row.answer_date,
+                  date: (new Date(parseInt(row.answer_date))).toISOString(),
                   answerer_name: row.answerer_name,
                   helpfulness: row.helpfulness,
                   photos: (row.url ? [row.url] : [])
@@ -42,25 +42,27 @@ module.exports = {
           let newQuestion = {
             question_id: row.question_id,
             question_body: row.question_body,
-            question_date: row.question_date,
+            question_date: (new Date(parseInt(row.question_date))).toISOString(),
             asker_name: row.asker_name,
             question_helpfulness: row.question_helpfulness,
             reported: row.reported,
             answers: {}
           }
-          newQuestion.answers[row.answer_id] = {
-            id: row.answer_id,
-            body: row.answer_body,
-            date: row.answer_date,
-            answerer_name: row.answerer_name,
-            helpfulness: row.helpfulness,
-            photos: row.url ? [row.url] : []
+          if (row.answer_id) {
+            newQuestion.answers[row.answer_id] = {
+              id: row.answer_id,
+              body: row.answer_body,
+              date: (new Date(parseInt(row.answer_date))).toISOString(),
+              answerer_name: row.answerer_name,
+              helpfulness: row.helpfulness,
+              photos: row.url ? [row.url] : []
+            }
           }
+
           // if the question_id is not found in the response, add the new question object to response
           if (!foundProduct_id) { response.results.push(newQuestion) };
 
         }
-        console.log(response);
         res.json(response);
       })
     },
@@ -113,7 +115,7 @@ module.exports = {
           let newAnwer = {
             answer_id: row.answer_id,
             body: row.body,
-            date: row.date,
+            date: (new Date(ParseInt(row.date))).toISOString(),
             answerer_name: row.answerer_name,
             helpfulness: row.helpfulness,
             photos: row.photo_id ? [{ id: row.photo_id, url: row.url }] : []
