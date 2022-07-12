@@ -22,7 +22,6 @@ module.exports = {
       WHERE product_id = $1
       ORDER BY question_id ASC;`;
       db.query(queuryString, [product_id], (err, results) => {
-        console.log(results);
         cb(err, results)
       })
     },
@@ -66,6 +65,7 @@ module.exports = {
       WHERE question_id = $1
       order by answer_id ASC;`;
       db.query(queuryString, [question_id], (err, results) => {
+        console.log('testing when there is no matching answers for given question Id ', err)
         cb(err, results)
       })
     },

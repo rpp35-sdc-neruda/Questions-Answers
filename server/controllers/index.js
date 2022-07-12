@@ -3,6 +3,10 @@ module.exports = {
   questions: {
     get: function (req, res) {
       let product_id = req.query.product_id;
+      if(isNaN(product_id)) {
+        res.status(400).end()
+        return;
+      }
       models.questions.get(product_id, (err, results) => {
         if (err) { throw err; }
         let response = {
@@ -93,7 +97,7 @@ module.exports = {
       models.answers.get(question_id, (err, results) => {
         if (err) { throw err; }
         let response = {
-          question: "1",
+          question: question_id,
           page: 0,
           count: 5,
           results: []
@@ -115,7 +119,7 @@ module.exports = {
           let newAnwer = {
             answer_id: row.answer_id,
             body: row.body,
-            date: (new Date(ParseInt(row.date))).toISOString(),
+            date: (new Date(parseInt(row.date))).toISOString(),
             answerer_name: row.answerer_name,
             helpfulness: row.helpfulness,
             photos: row.photo_id ? [{ id: row.photo_id, url: row.url }] : []

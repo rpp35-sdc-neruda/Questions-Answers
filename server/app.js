@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -22,7 +21,7 @@ app.use((req, res, next) => {
 app.use('/qa/questions', routers.questions);
 app.use('/qa/answers', routers.answers)
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
-module.exports.app = app;
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`)
+// })
+module.exports = app;
