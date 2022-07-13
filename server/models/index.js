@@ -1,7 +1,7 @@
 const db = require('../db');
 module.exports = {
   questions: {
-    get: function (product_id, cb) {
+    get: function (params, cb) {
       let queuryString = `select q.question_id,
       q.question_body,
       q.date as question_date,
@@ -20,8 +20,9 @@ module.exports = {
       left JOIN photos ph
       ON a.answer_id = ph.answer_id
       WHERE product_id = $1
-      ORDER BY question_id ASC;`;
-      db.query(queuryString, [product_id], (err, results) => {
+      ORDER BY question_id ASC;`
+      ;
+      db.query(queuryString, params, (err, results) => {
         cb(err, results)
       })
     },
@@ -51,7 +52,7 @@ module.exports = {
     }
   },
   answers: {
-    get: function (question_id, cb) {
+    get: function (params, cb) {
       var queuryString = `select a.answer_id,
       a.answer_body as body,
       a. date,
@@ -64,8 +65,8 @@ module.exports = {
       ON a.answer_id = ph.answer_id
       WHERE question_id = $1
       order by answer_id ASC;`;
-      db.query(queuryString, [question_id], (err, results) => {
-        console.log('testing when there is no matching answers for given question Id ', err)
+      db.query(queuryString, params, (err, results) => {
+        //console.log('testing when there is no matching answers for given question Id ', err)
         cb(err, results)
       })
     },

@@ -2,15 +2,15 @@ var models = require('../models')
 module.exports = {
   questions: {
     get: function (req, res) {
-      let product_id = req.query.product_id;
-      if(isNaN(product_id)) {
+      if (isNaN(req.query.product_id)) {
         res.status(400).end()
         return;
       }
-      models.questions.get(product_id, (err, results) => {
+      let params = [req.query.product_id]
+      models.questions.get(params, (err, results) => {
         if (err) { throw err; }
         let response = {
-          "product_id": product_id,
+          "product_id": req.query.product_id,
           "results": []
         }
         let foundProduct_id = false;
@@ -67,6 +67,15 @@ module.exports = {
           if (!foundProduct_id) { response.results.push(newQuestion) };
 
         }
+        //paginate the response to send the correct count and page
+        let page = req.query.page || 1;
+        let count = req.query.count || 5;
+        let questionsBeforePagenating = response.results;
+        let startingIndex = (page - 1) * count;
+        let endingIndex = count * page;
+        let questionsAfterPagenation = questionsBeforePagenating.slice(startingIndex, endingIndex);
+        //replace with the correct portion of response.results
+        response.results = questionsAfterPagenation;
         res.json(response);
       })
     },
@@ -93,11 +102,11 @@ module.exports = {
   },
   answers: {
     get: function (req, res) {
-      let question_id = req.query.question_id
-      models.answers.get(question_id, (err, results) => {
+      params = [req.query.question_id]
+      models.answers.get(params, (err, results) => {
         if (err) { throw err; }
         let response = {
-          question: question_id,
+          question: req.query.question_id,
           page: 0,
           count: 5,
           results: []
@@ -129,6 +138,15 @@ module.exports = {
             response.results.push(newAnwer);
           }
         }
+        //paginate the response to send the correct count and page
+        let page = req.query.page || 1;
+        let count = req.query.count || 5;
+        let questionsBeforePagenating = response.results;
+        let startingIndex = (page - 1) * count;
+        let endingIndex = count * page;
+        let questionsAfterPagenation = questionsBeforePagenating.slice(startingIndex, endingIndex);
+        //replace with the correct portion of response.results
+        response.results = questionsAfterPagenation;
         res.json(response);
       });
     },
