@@ -10,6 +10,7 @@ const routers = require('./routes.js');
 app.use(compression());
 app.use(cors());
 app.use(express.static(path.join(__dirname, './client/client/dist')));
+app.use(express.static(path.join(__dirname, './loaderio-1bac8e51c825e6245be8cb20658e9e92.txt')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
