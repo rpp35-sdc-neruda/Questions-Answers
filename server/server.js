@@ -1,3 +1,3 @@
 const app = require('./app.js')
 
-app.listen(1234, () => console.log("listening on port 1234"))
+app.listen(3000, () => console.log("listening on port 3000"))

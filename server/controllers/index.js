@@ -105,10 +105,12 @@ module.exports = {
       params = [req.query.question_id]
       models.answers.get(params, (err, results) => {
         if (err) { throw err; }
+        let page = Number(req.query.page) || 1;
+        let count = Number(req.query.count) || 5;
         let response = {
           question: req.query.question_id,
-          page: 0,
-          count: 5,
+          page: page,
+          count: count,
           results: []
         }
         for (let i = 0; i < results.rows.length; i++) {
@@ -139,8 +141,7 @@ module.exports = {
           }
         }
         //paginate the response to send the correct count and page
-        let page = req.query.page || 1;
-        let count = req.query.count || 5;
+
         let questionsBeforePagenating = response.results;
         let startingIndex = (page - 1) * count;
         let endingIndex = count * page;

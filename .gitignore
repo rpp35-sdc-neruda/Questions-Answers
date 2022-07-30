@@ -3,3 +3,7 @@
 /package-lock.json
 /.vscode
 /client
+/thunder-tests
+/SDC_database.pem
+/csvFiles
+/SDC_server.pem
