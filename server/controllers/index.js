@@ -21,15 +21,15 @@ module.exports = {
         let data = await redisClient.get(`questions?product_id${product_id}`);
         //if the key 'questions?product_id${product_id}' is cached, return the corresponding value
         if (data !== null) {
-          console.log('hit cache')
+          //console.log('hit cache')
           resolve(JSON.parse(data))
 
         } else {
           //if not cached, query database
-          console.log('cache Miss')
+          //console.log('cache Miss')
           models.questions.get(params, (err, results) => {
             if (err) console.log(err)
-            console.log('Miss Cache')
+           // console.log('Miss Cache')
             shapeResponse(err, results);
             //set the key and corresponding value in redis
             redisClient.set(`questions?product_id${product_id}`, JSON.stringify(response));
