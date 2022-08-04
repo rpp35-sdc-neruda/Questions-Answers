@@ -9,7 +9,7 @@ module.exports = {
         return;
       }
       let product_id = req.query.product_id.toString();
-      console.log(product_id);
+      //console.log(product_id);
       params = [req.query.product_id]
       let response = {
         "product_id": req.query.product_id,
@@ -42,7 +42,7 @@ module.exports = {
 
       function shapeResponse(err, results) {
         if (err) { throw err; }
-        console.log('shaping response')
+        //console.log('shaping response')
         let foundProduct_id = false;
         //for each row of the results
         for (let i = 0; i < results.rows.length; i++) {
