@@ -1,4 +1,5 @@
 const db = require('../db');
+
 module.exports = {
   questions: {
     get: function (params, cb) {

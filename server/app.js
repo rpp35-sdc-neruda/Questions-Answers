@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, './client/client/dist')));
 app.use(express.static('loaderio'));
 //app.use(express.static(path.join(__dirname, '../loaderio-1bac8e51c825e6245be8cb20658e9e92.txt')));
-console.log(__dirname);
+//console.log(__dirname);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use((req, res, next) => {
