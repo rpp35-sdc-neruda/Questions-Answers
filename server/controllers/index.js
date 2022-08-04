@@ -151,13 +151,13 @@ module.exports = {
         let data = await redisClient.get(`answers?question_id${question_id}`);
         //console.log(redisClient);
         if (data !== null) {
-          console.log('hit cache')
+          //console.log('hit cache')
           resolve(JSON.parse(data))
         } else {
-          console.log('cache Miss')
+          //console.log('cache Miss')
           models.answers.get(params, (err, results) => {
             if (err) console.log(err)
-            console.log('Miss Cache')
+            //console.log('Miss Cache')
             shapeResponse(err, results);
             redisClient.set(`answers?question_id${question_id}`, JSON.stringify(response));
             resolve(response);
