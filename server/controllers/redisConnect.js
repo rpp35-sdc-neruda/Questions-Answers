@@ -1,6 +1,6 @@
 
 const Redis = require('redis');
-const redisClient = Redis.createClient({host: '52.91.205.48'});
+const redisClient = Redis.createClient({host: '3.87.14.99'});
 
 //const redisClient = Redis.createClient();
 //redisClient.on('connect', () => console.log('Hi redis'));
